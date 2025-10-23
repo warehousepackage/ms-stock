@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
 
 import java.util.UUID;
 
@@ -14,27 +13,22 @@ public class Item {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotBlank(message = "Name can´t be empty")
     private String name;
 
-    public Item(UUID id, String name) {
-        this.id = id;
-        this.name = name;
-    }
+    private Integer quantity;
 
     public Item() {
     }
 
-    public Item(String name) {
-        this.name = name;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
+    public Item(UUID id, String name, Integer quantity) {
         this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+    }
+
+    public Item(String name, Integer quantity){
+        this.name = name;
+        this.quantity = quantity;
     }
 
     public String getName() {
@@ -44,4 +38,10 @@ public class Item {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Integer getQuantity(){
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity){ this.quantity = quantity;}
 }

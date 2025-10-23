@@ -1,29 +1,37 @@
 package com.spring.stock.controller;
 
 import com.spring.stock.dto.request.ItemCreateRequest;
-import com.spring.stock.dto.response.ItemCreateResponse;
+import com.spring.stock.dto.request.ItemModifyQuantityRequest;
+import com.spring.stock.dto.response.ItemResponse;
 import com.spring.stock.entity.Item;
 import com.spring.stock.mapper.ItemMapper;
 import com.spring.stock.service.ItemService;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/items")
-@RequiredArgsConstructor
 public class ItemController {
 
-    private final ItemService itemService;
+    @Autowired
+    private ItemService itemService;
 
     @PostMapping("/register")
-    public ResponseEntity<ItemCreateResponse> createItem(@RequestBody ItemCreateRequest request){
+    public ResponseEntity<ItemResponse> createItem(@RequestBody ItemCreateRequest request){
         Item item = itemService.createItem(ItemMapper.ItemResquestToItem(request));
-        ItemCreateResponse itemCreateResponse = ItemMapper.ItemToItemResponse(item);
+        ItemResponse itemCreateResponse = ItemMapper.ItemToItemResponse(item);
         return ResponseEntity.status(201).body(itemCreateResponse);
     }
+
+
+    @PostMapping("/{id}/quantity")
+    public ResponseEntity<Item> increaseItem(@PathVariable UUID id, @RequestBody ItemModifyQuantityRequest request){
+        Item item = itemService.increaseQuantity(id, request.quantity(), request.operation());
+        return ResponseEntity.ok().body(item);
+    }
+
+
 }

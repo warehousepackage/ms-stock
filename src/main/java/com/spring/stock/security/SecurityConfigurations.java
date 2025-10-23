@@ -23,6 +23,7 @@ public class SecurityConfigurations {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/items/register").hasRole("SUPORTE")
+                        .requestMatchers("/api/items/${id}/quantity").hasRole("SUPORTE")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
